@@ -40,7 +40,7 @@ theme.panel_height = 36 -- panel height
 theme.panel_width  = 4  -- window border width
 theme.useless_gap  = 4  -- useless gap
 
-theme.wallpaper = theme.path .. "/wallpaper/primary.png" -- wallpaper file
+theme.wallpaper = theme.path .. "/wallpaper/primary.jpg" -- wallpaper file
 
 -- Fonts
 -------------------------------------------------------------------------------
