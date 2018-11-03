@@ -1,3 +1,4 @@
+------------------------------------------------------------------------------
 -- Hotkeys and mouse buttons config
 ------------------------------------------------------------------------------
 
@@ -308,6 +309,10 @@ function hotkeys:init(args)
             { description = "Window control mode", group = "Main" }
         },
         {
+            { env.mod }, "F3", function() bwm.float.qlaunch:show() end,
+            { description = "Application quick launcher", group = "Main" }
+        },
+        {
             { env.mod, "Control" }, "r", awesome.restart,
             { description = "Reload awesome", group = "Main" }
         },
@@ -318,7 +323,113 @@ function hotkeys:init(args)
         {
             { env.mod }, "Return", function() awful.spawn(env.terminal) end,
             { description = "Open a terminal", group = "Main" }
+        },
+        
+        {
+            { env.mod }, "1", focus_switch_byd("right"),
+            { description = "Go to right client", group = "Client focus" }
+        },
+        {
+            { env.mod }, "j", focus_switch_byd("left"),
+            { description = "Go to left client", group = "Client focus" }
+        },
+        {
+            { env.mod }, "i", focus_switch_byd("up"),
+            { description = "Go to upper client", group = "Client focus" }
+        },
+        {
+            { env.mod }, "k", focus_switch_byd("down"),
+            { description = "go to lower client", group = "Client focus" }
+        },
+        {
+            { env.mod }, "u", awful.client.urgent.jumpto,
+            { description = "Go to urgent client", group = "Client focus" }
+        },
+        {
+            { env.mod }, "Tab", focus_to_previous,
+            { description = "Go to previous client", group = "Client focus" }
+        },
+
+        {
+            { env.mod }, "w", function() mainmenu:show() end,
+            { description = "Show main menu", group = "Widgets" }
+        },
+        {
+            { env.mod}, "r", function() apprunner:show() end,
+            { description = "Application laucher", group = "Widgets" }
+        },
+        {
+            { env.mod }, "p", function() bwm.float.prompt:run() end,
+            { description = "Show the prompt box", group = "Widgets" }
+        },
+        {
+            { env.mod, "Control" }, "i", function() bwm.widget.minitray:toggle() end,
+            { description = "Show minitray", group = "Widgets" }
+        },
+
+        {
+            { env.mod }, "t", function() bwm.toggle(client.focus) end,
+            { description = "Show/hide titlebar for focused client", group = "Titlebar" }
+        },
+        {
+            { env.mod, "Control" }, "t", function() bwm.switch(client.focus) end,
+            { description = "Switch titlebar view for focused client", group = "Titlebar" }
+        },
+        {
+            { env.mod, "Shift" }, "t", function() bwm.toggle_all() end,
+            { description = "Show/hide titlebar for all clients", group = "Titlebar" }
+        },
+        {
+            { env.mod, "Control", "Shift" }, "t", function() bwm.switch_all() end,
+            { description = "Switch titlebar view for all clients", group = "Titlebar" }
+        },
+
+        {
+            { env.mod }, "a", nil, function() appswitcher:show({ filter = current }) end,
+            { description = "Switch to next with current tag", group = "Application switcher" }
+        },
+        {
+            { env.mod }, "q", nil, function() appswitcher:show({ filter = current, reverse = true }) end,
+            { description = "Switch to previous with current tag", group = "Application switcher" }
+        },
+        {
+            { env.mod, "Shift" }, "a", nil, function() appswitcher:show({ filter = allscr }) end,
+            { description = "Switch to next through all tags", group = "Application switcher" }
+        },
+        {
+            { env.mod, "Shift" }, "q", nil, function() appswitcher:show({ filter = allscr, reverse = true }) end,
+            { description = "Switch to previous through all tags", group = "Application switcher" }
+        },
+
+        {
+            { env.mod }, "Escape", awful.tag.history.restore,
+            { description = "Go previous tag", group = "Tag navigation" }
+        },
+        {
+            { env.mod }, "Right", asful.tag.viewnext,
+            { description = "View next tag", group = "Tag navigation" }
+        },
+        {
+            { env.mod }, "Left", awful.tag.viewprev,
+            { description = "View previous tag", group = "Tag navigation" }
+        },
+
+        {
+            { env.mod }, "y", function() layoutbox:toggle_menu(mouse.screen.selected_tag) end,
+            { description = "Show layout menu", group = "Layouts" }
+        },
+        {
+            { env.mod }, "Up", function() awful.layout.inc(1) end,
+            { description = "Select next layout", group = "Layouts" }
+        },
+        {
+            { env.mod }, "Down", function() awful.layout.inc(-1) end,
+            { description = "Select prevous layout", group = "Layouts" }
         }
     }
+
+    -- Client keys
+    ---------------------------------------
+    
 
 end
