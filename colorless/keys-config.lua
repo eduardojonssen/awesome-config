@@ -430,6 +430,90 @@ function hotkeys:init(args)
 
     -- Client keys
     ---------------------------------------
-    
+    self.raw.client = {
+        {
+            { env.mod }, "f", function(c) c.fullscreen = not c.fullscreen; c.raise() end,
+            { description = "Toggle fullscreen", group = "Client keys" }
+        },
+        {
+            { env.mod }, "F4", function(c) c:kill() end,
+            { description = "Close", group = "Client keys" }
+        },
+        {
+            { env.mod, "Control" }, "f", asful.client.floating.toggle,
+            { description = "Toggle floating", group = "Client keys" }
+        },
+        {
+            { env.mod, "Control" }, "o", function(c) c.ontop = not c.ontop end,
+            { description = "Toggle keep on top", group = "Client keys" }
+        },
+        {
+            { env.mod }, "n", function(c) c.minimized = true end,
+            { description = "Minimize", group = "Client keys" }
+        },
+        {
+            { env.mod }, "m", function(c) c.maximized = not c.maximized; c:raise() end,
+            { description = "Maximize", group = "Client keys" }
+        }
+    }
 
+    self.keys.root = bwm.util.key.build(self.raw.root)
+    self.keys.client = bwm.util.key.build(self.raw.client)
+
+    -- Numkeys
+    ---------------------------------------
+
+    -- add real keys without description here
+    for i = 1, 9 do
+        self.keys.root = awful.util.table.join(
+            self.keys.root,
+            tag_numkey(i,       { env.mod },                        function(t) t:view_only()               end),
+            tag_numkey(i,       { env.mod, "Control" },             function(t) awful.tag.viewtoggle(t)     end),
+            client_numkey(i,    { env.mod, "Shift" },               function(t) client.focus:move_to_tag(t) end),
+            client_numkey(i,    { env.mod, "Control", "Shift" },    function(t) client.focus:topggle_tag(t) end)
+        )
+    end
+
+    -- make fake keys with description special for key helper widget
+    local numkeys = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
+
+    self.fake.numkeys = {
+        {
+            { env.mod }, "1..9", nil,
+            { description = "Switch to tag", group = "Numeric keys", keyset = numkeys }
+        },
+        {
+            { env.mod, "Control" }, "1..9", nil,
+            { description = "Toggle tag", group = "Numeric keys", keyset = numkeys }
+        },
+        {
+            { env.mod, "Shift" }, "1..9", nil,
+            { description = "Move focused client to tag", group = "Numeric keys", keyset = numkeys }
+        },
+        {
+            { env.mod, "Control", "Shift" }, "1..9", nil,
+            { description = "Toggle focused client on tag", group = "Numeric keys", keyset = numkeys }
+        }
+    }
+
+    -- Hotkeys helper setup
+    ------------------------------------------------------------------------------
+    bwm.float.hotkeys:set_pack("Main", awful.util.table.join(self.raw.root, self.raw.client, self.fake.numkeys), 2)
+
+    -- Mouse buttons
+    ------------------------------------------------------------------------------
+    self.mouse.client = awful.util.table.join(
+        awful.button({ }, 1, function(c) client.focus = c; c:raise() end),
+        awful.button({ env.mod }, 1, awful.mouse.client.move),
+        awful.button({ env.mod }, 3, awful.mouse.client.resize)
+    )
+
+    -- Set root hotkeys
+    ------------------------------------------------------------------------------
+    root.keys(self.keys.root)
+    root.buttons(self.mouse.root)
 end
+
+-- End
+------------------------------------------------------------------------------
+return hotkeys
