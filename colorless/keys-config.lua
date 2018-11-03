@@ -218,6 +218,107 @@ function hotkeys:init(args)
 
     -- Emacs like key sequences
     ---------------------------------------
-    
+
+    -- initial key
+    -- first prefix key
+    local keyseq = { { env.mod }, "c", {}, {} }
+
+    -- second sequence keys
+    keyseq[3] = {
+        -- second and last key in sequence, full description and action is necessary
+        {
+            {}, "p", function() toggle_placement(env) end,
+            { description = "Switch master/slave window placement", group = "Clients management" }
+        },
+
+        -- not last key in sequence, no description needed here
+        { {}, "k", {}, {} }, -- application kill group
+        { {}, "n", {}, {} }, -- application minimize group
+        { {}, "r", {}, {} }, -- application restore group
+
+        -- { {}, "g", {}, {} }, -- run or rise group
+        -- { {}, "f", {}, {} }, -- launch application group
+    }
+
+    -- application kill actions,
+    -- last key in sequence, full description and action is necessary
+    keyseq[3][2][3] = {
+        {
+            {}, "f", function() if client.focus then client.focus:kill() end end,
+            { description = "Kill focused client", group = "Kill application", keyset = { "f" } }
+        },
+        {
+            {}, "a", kill_all,
+            { description = "Kill all clients with current tag", group = "Kill application", keyset = { "a" } }
+        },
+    }
+
+    -- application minimize actions,
+    -- last key in sequence, full description and action is necessary
+    keyseq[3][3][3] = {
+        {
+            {}, "f", function() if client.focus then client.focus.minimized = true end end,
+            { description = "Minimize focused client", group = "Clients management", keyset = { "f" } }
+        },
+        {
+            {}, "a", minimize_all,
+            { description = "Minimize all clients with current tag", group = "Clients management", keyset = { "a" } }
+        },
+        {
+            {}, "e", minimize_all_except_focused,
+            { description = "Minimize all clients except focused", group = "Clients management", keyset = { "e" } }
+        },
+    }
+
+    -- application restore actions,
+    -- last key in sequence, full description and action is necessary
+    keyseq[3][4][3] = {
+        {
+            {}, "f", restore_client,
+            { description = "Restore minimized client", group = "Clients management", keyset = { "f" } }
+        },
+        {
+            {}, "a", restore_all,
+            { description = "Restore all clients with current tag", group = "Clients management", keyset = { "a" } }
+        },
+    }
+
+    -- quick lauch key sequence actions, auto fill up last sequence key
+    for i = 1, 9 do
+        local ik = tostring(i)
+        table.insert(keyseq[3][5][3], {
+            {}, ik, function() qlaunch:run_or_raise(ik) end,
+            { description = "Run or rise application " .. ik, group = "Run or Rise", keyset = { ik } }
+        })
+        table.insert(keyseq[3][6][3], {
+            {}, ik, function() qlaunch:run_or_raise(ik, true) end,
+            { description = "Launch application " .. ik, group = "Quick Launch", keyset = { ik } }
+        })
+    end
+
+    -- Global keys
+    ------------------------------------------------------------------------------
+    self.raw.root = {
+        {
+            { env.mod }, "F1", function() redtip:show() end,
+            { description = "Show hotkeys helper" , group = "Main" }
+        },
+        {
+            { env.mod }, "F2", function() bwm.service.navigator:run() end,
+            { description = "Window control mode", group = "Main" }
+        },
+        {
+            { env.mod, "Control" }, "r", awesome.restart,
+            { description = "Reload awesome", group = "Main" }
+        },
+        {
+            { env.mod }, "c", function() bwm.float.keychain:activate(keyseq, "User") end,
+            { description = "User key sequence", group = "Main" }
+        },
+        {
+            { env.mod }, "Return", function() awful.spawn(env.terminal) end,
+            { description = "Open a terminal", group = "Main" }
+        }
+    }
 
 end
