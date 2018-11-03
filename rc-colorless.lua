@@ -48,7 +48,7 @@ tasklist.buttons = awful.util.table.join(
     awful.button({}, 2, bwm.widget.tasklist.action.close),
     awful.button({}, 3, bwm.widget.tasklist.action.menu),
     awful.button({}, 4, bwm.widget.tasklist.action.switch_next),
-    awful.button({}, 5, bwm.widget.tasklist.action.switch_prev),
+    awful.button({}, 5, bwm.widget.tasklist.action.switch_prev)
 )
 
 -- Taglist widget
